@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.warbithouse.projectassignment.model.Project;
 import com.warbithouse.projectassignment.repository.ProjectRepository;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @CrossOrigin(origins = "${SPRING_ORIGINS:*}")
@@ -22,6 +23,11 @@ public class ProjectController {
     @GetMapping("/")
     public ResponseEntity<List<Project>> getProject() {
         return ResponseEntity.ok(projectRepository.findAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Project> getProjectById(@PathVariable int id) {
+        return ResponseEntity.of(projectRepository.findById(id));
     }
 
 }
