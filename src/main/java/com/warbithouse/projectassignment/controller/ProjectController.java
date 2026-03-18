@@ -3,6 +3,7 @@ package com.warbithouse.projectassignment.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,8 @@ import com.warbithouse.projectassignment.model.Project;
 import com.warbithouse.projectassignment.repository.ProjectRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @CrossOrigin(origins = "${SPRING_ORIGINS:*}")
@@ -30,4 +33,9 @@ public class ProjectController {
         return ResponseEntity.of(projectRepository.findById(id));
     }
 
+    @PostMapping("/")
+    public ResponseEntity<Project> createProject(@RequestBody Project projectDetails) {
+        Project project = projectRepository.save(projectDetails);
+        return ResponseEntity.status(HttpStatus.CREATED).body(project);
+    }
 }
