@@ -14,6 +14,7 @@ import com.warbithouse.projectassignment.repository.ProjectRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
@@ -37,5 +38,12 @@ public class ProjectController {
     public ResponseEntity<Project> createProject(@RequestBody Project projectDetails) {
         Project project = projectRepository.save(projectDetails);
         return ResponseEntity.status(HttpStatus.CREATED).body(project);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Project> updateProject(@PathVariable int id, @RequestBody Project projectDetails) {
+        Project project = projectRepository.findById(id).orElseThrow();
+        project.setName(projectDetails.getName());
+        return ResponseEntity.ok(projectRepository.save(project));
     }
 }
