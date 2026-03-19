@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,5 +46,13 @@ public class ProjectController {
         Project project = projectRepository.findById(id).orElseThrow();
         project.setName(projectDetails.getName());
         return ResponseEntity.ok(projectRepository.save(project));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteProject(@PathVariable int id) {
+        Project project = projectRepository.findById(id).orElseThrow();
+        projectRepository.deleteFromStudentProjectByProjectId(id);
+        projectRepository.delete(project);
+        return ResponseEntity.ok("✅ Project Deleted Successfully!!");
     }
 }
