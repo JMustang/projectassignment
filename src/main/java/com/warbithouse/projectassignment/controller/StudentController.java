@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +25,12 @@ public class StudentController {
     private StudentRepository studentRepository;
 
     @GetMapping("/")
-    public ResponseEntity<List<Student>> GetAllStudents() {
+    public ResponseEntity<List<Student>> getAllStudents() {
         return ResponseEntity.ok(studentRepository.findAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Student> getStudentById(@PathVariable int id) {
+        return ResponseEntity.of(studentRepository.findById(id));
     }
 }
