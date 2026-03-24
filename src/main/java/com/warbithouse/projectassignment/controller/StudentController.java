@@ -3,10 +3,13 @@ package com.warbithouse.projectassignment.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,5 +35,11 @@ public class StudentController {
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable int id) {
         return ResponseEntity.of(studentRepository.findById(id));
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<Student> createStudent(@RequestBody Student studentDetails) {
+        Student student = studentRepository.save(studentDetails);
+        return ResponseEntity.status(HttpStatus.CREATED).body(student);
     }
 }
