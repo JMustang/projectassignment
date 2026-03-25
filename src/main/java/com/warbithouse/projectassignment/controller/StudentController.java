@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,5 +54,13 @@ public class StudentController {
     public ResponseEntity<Student> createStudent(@RequestBody Student studentDetails) {
         Student student = studentRepository.save(studentDetails);
         return ResponseEntity.status(HttpStatus.CREATED).body(student);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Student> updateStudent(@PathVariable int id, @RequestBody Student studentDetails) {
+        Student student = retrieveStudentById(id);
+        student.setName(studentDetails.getName());
+        student.setAverage(studentDetails.getAverage());
+        return ResponseEntity.ok(studentRepository.save(student));
     }
 }
