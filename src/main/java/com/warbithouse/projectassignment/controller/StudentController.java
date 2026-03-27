@@ -25,6 +25,7 @@ import com.warbithouse.projectassignment.repository.StudentRepository;
 @CrossOrigin(origins = "${SPRING_ORIGINS:*}")
 @RequestMapping("/students")
 public class StudentController {
+    private static int maxProjectPerStudent = 3;
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -70,5 +71,10 @@ public class StudentController {
         Student student = retrieveStudentById(id);
         studentRepository.delete(student);
         return ResponseEntity.ok("Student deleted Successfully!");
+    }
+
+    @GetMapping("/max-project")
+    public ResponseEntity<Integer> getMaxProject() {
+        return ResponseEntity.ok(maxProjectPerStudent);
     }
 }
