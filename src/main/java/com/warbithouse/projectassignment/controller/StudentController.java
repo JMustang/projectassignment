@@ -74,7 +74,13 @@ public class StudentController {
     }
 
     @GetMapping("/max-project")
-    public ResponseEntity<Integer> getMaxProject() {
+    public ResponseEntity<Integer> getMaxProjectPerStudent() {
         return ResponseEntity.ok(maxProjectPerStudent);
+    }
+
+    @PutMapping("/max-project")
+    public ResponseEntity<Integer> updateMaxProjectPerStudent(@RequestBody int maximumNumber) {
+        maxProjectPerStudent = maximumNumber;
+        return ResponseEntity.ok(maximumNumber);
     }
 }
