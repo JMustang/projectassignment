@@ -101,4 +101,15 @@ public class StudentController {
         student.getProjects().add(project);
         return ResponseEntity.status(HttpStatus.CREATED).body(studentRepository.save(student));
     }
+
+    @DeleteMapping("/{student_id}/projects/{project_id}")
+    public ResponseEntity<Student> deleteProjectFromStudent(@PathVariable int student_id,
+            @PathVariable int project_id) {
+        Student student = retrieveStudentById(student_id);
+        Project project = retrieveProjectById(project_id);
+
+        student.getProjects().remove(project);
+        return ResponseEntity.ok(studentRepository.save(student));
+
+    }
 }
