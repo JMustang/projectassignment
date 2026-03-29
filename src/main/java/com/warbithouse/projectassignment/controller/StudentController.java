@@ -83,4 +83,22 @@ public class StudentController {
         maxProjectPerStudent = maximumNumber;
         return ResponseEntity.ok(maximumNumber);
     }
+
+    @PostMapping("/{student_id}/projects/{project_id}")
+    public ResponseEntity<Student> addProjectToStudent(@PathVariable int student_id, @PathVariable int project_id) {
+        Student student = retrieveStudentById(student_id);
+        Project project = retrieveProjectById(project_id);
+
+        for (Project p : student.getProjects()) {
+            if (p.getId() == project.getId()) {
+                return ResponseEntity.status(400).body(student);
+            }
+        }
+
+        if (student.getProjects().size() >= maxProjectPerStudent) {
+            return ResponseEntity.badRequest().body(student);
+        }
+        student.getProjects().add(project);
+        return ResponseEntity.status(HttpStatus.CREATED).body(studentRepository.save(student));
+    }
 }
