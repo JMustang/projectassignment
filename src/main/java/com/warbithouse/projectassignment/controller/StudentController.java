@@ -1,5 +1,7 @@
 package com.warbithouse.projectassignment.controller;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,5 +113,25 @@ public class StudentController {
         student.getProjects().remove(project);
         return ResponseEntity.ok(studentRepository.save(student));
 
+    }
+
+    @GetMapping("{student_id}/availableprojects")
+    public ResponseEntity<List<Project>> getStudentAvailableProject(@PathVariable int student_id) {
+        Student student = retrieveStudentById(student_id);
+        List<Project> availableProjects = new ArrayList<Project>();
+        if (student.getProjects().size() >= maxProjectPerStudent) {
+            return ResponseEntity.ok(availableProjects);
+        }
+        List<Project> allProjects = projectRepository.findAll();
+        HashSet<Integer> projectIds = new HashSet<>();
+        for (Project p : student.getProjects()) {
+            projectIds.add(p.getId());
+        }
+        for (Project pro : allProjects) {
+            if (!projectIds.contains(pro.getId())) {
+                availableProjects.add(pro);
+            }
+        }
+        return ResponseEntity.ok(availableProjects);
     }
 }
