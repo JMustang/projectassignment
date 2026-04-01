@@ -1,8 +1,10 @@
 package com.warbithouse.projectassignment.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ExpressionException;
@@ -133,5 +135,24 @@ public class StudentController {
             }
         }
         return ResponseEntity.ok(availableProjects);
+    }
+
+    @GetMapping("/assignment")
+    public ResponseEntity<HashMap<String, String>> assignmentProjectToStudent() {
+        HashMap<String, String> assignList = new HashMap<String, String>();
+        HashSet<Integer> projectIds = projectRepository.findAll().stream().map(Project::getId)
+                .collect(Collectors.toCollection(HashSet::new));
+        List<Student> listStudent = studentRepository.findAll();
+        listStudent.sort((Student s1, Student s2) -> Double.compare(s2.getAverage(), s1.getAverage()));
+        for (Student s : listStudent) {
+            for (Project p : s.getProjects()) {
+                if (projectIds.contains(p.getId())) {
+                    assignList.put(s.getName(), p.getName());
+                    projectIds.remove(p.getId());
+                    break;
+                }
+            }
+        }
+        return ResponseEntity.ok(assignList);
     }
 }
